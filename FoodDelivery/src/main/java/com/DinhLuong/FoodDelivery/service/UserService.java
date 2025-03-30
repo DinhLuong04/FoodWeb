@@ -45,7 +45,7 @@ public class UserService implements UsersServiceImp {
                     return imgBBService.upLoadImage(file); 
                 }
             } catch (IOException e) {
-                throw new RuntimeException("Lỗi khi đọc ảnh: " + e.getMessage());
+                throw new RuntimeException("Lỗi khi đọc ảnh: alo " + e.getMessage());
             }
         }
         return null; 
