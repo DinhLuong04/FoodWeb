@@ -17,15 +17,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.DinhLuong.FoodDelivery.Config.ApiEndpoints;
+
 @Configuration
 @EnableWebSecurity
 public class CustomFillterSecurity {
-     private static final List<String> PUBLIC_API_LIST = List.of(
-            "/ws/**", "/login", "/swagger-ui", "/v3/api-docs", "/Restaurant/getRes", "/Order","/chat/**","/user/**"
-            ,"/chatroom/**","/user"
-            ,"/app/**"
-            ,"/private-message/**"
-            );
+     
 
     @Autowired
     private CustomFillterJWT customFillterJWT;
@@ -53,15 +50,10 @@ public class CustomFillterSecurity {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login/**", "/swagger-ui/**", "/v3/api-docs/**","/Restaurant/getRes","/chat/**","/user/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/{ResId}/add-Rating/{UserId}","/Restaurant/getAllRes").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/Restaurant/update","/Restaurant/delete").hasRole("ADMIN")
-                .requestMatchers("/Order/**").permitAll()
-                .requestMatchers("/ws/**", "/login", "/swagger-ui", "/v3/api-docs", "/Restaurant/getRes", "/Order","/chat/**","/user/**"
-            ,"/chatroom/**","/user"
-            ,"/app/**"
-            ,"/private-message/**").permitAll()
+                .requestMatchers(ApiEndpoints.PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(ApiEndpoints.ADMIN_ENDPOINTS).hasRole("ADMIN")
+                .requestMatchers(ApiEndpoints.USER_OR_ADMIN_ENDPOINTS).hasAnyRole("USER", "ADMIN")
+                
                 
                 .anyRequest().authenticated()
             )

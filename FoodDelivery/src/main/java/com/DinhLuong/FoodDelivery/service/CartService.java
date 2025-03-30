@@ -1,5 +1,5 @@
 package com.DinhLuong.FoodDelivery.service;
-
+import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.Date;
 
@@ -32,20 +32,30 @@ public class CartService implements CartServiceImp {
     @Autowired
     FoodRepository foodRepository;
     @Override
+    @Transactional
     public boolean createCart(CreateCart createCart) {
         Users users=userRepository.findById(createCart.getUser_id()).orElseThrow(()->new RuntimeException(" User not found") );
         Restaurant res=restaurantRepository.findById(createCart.getRes_id()).orElseThrow(()-> new RuntimeException("Res not found") );
-        Cart cart=new Cart();
-        cart.setUsers(users);
-        cart.setRestaurant(res);
-        cart.setCreated_at(now);
-        cartRepository.save(cart);
+        Cart cart = cartRepository.findByUsersAndRestaurant(users, res)
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUsers(users);
+                    newCart.setRestaurant(res);
+                    newCart.setCreated_at(new Date());
+                    return cartRepository.save(newCart);
+                });
         Food food=foodRepository.findById(createCart.getFood_id()).orElseThrow(()-> new RuntimeException(" food not found"));
-        Cart_Items cart_Items=new Cart_Items();
-        cart_Items.setCart(cart);
-        cart_Items.setFood(food);
-        cart_Items.setQuantity(createCart.getQuality());
-        cartItemRepository.save(cart_Items);
+        Cart_Items cartItem = cartItemRepository.findByCartAndFood(cart, food)
+        .orElseGet(() -> {
+            Cart_Items newItem = new Cart_Items();
+            newItem.setCart(cart);
+            newItem.setFood(food);
+            newItem.setQuantity(0);
+            return newItem;
+        });
+         // Cập nhật số lượng món ăn
+        cartItem.setQuantity(cartItem.getQuantity() + createCart.getQuality());
+        cartItemRepository.save(cartItem);
         return true;
     }
 
