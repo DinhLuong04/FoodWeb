@@ -12,4 +12,5 @@ import com.DinhLuong.FoodDelivery.entity.Users;
 @Repository
 public interface CartRepository extends JpaRepository<Cart,Integer> {
      Optional<Cart> findByUsersAndRestaurant(Users users, Restaurant restaurant);
+     Optional<Cart> findByUsers(Users users);
 }

@@ -1,9 +1,12 @@
 package com.DinhLuong.FoodDelivery.Config;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class ApiEndpoints {
     public static final String[] PUBLIC_ENDPOINTS = {
-        "/Cart/**", "/login/**", "/swagger-ui/**", "/v3/api-docs/**",
-        "/Restaurant/getRes", "/chat/**", "/user/**", "/Order/**",
+        "/login/**", "/swagger-ui/**", "/v3/api-docs/**",
+        "/Restaurant/getRes", "/chat/**", 
         "/ws/**", "/chatroom/**", "/app/**", "/private-message/**"
     };
 
@@ -12,6 +15,16 @@ public class ApiEndpoints {
     };
 
     public static final String[] USER_OR_ADMIN_ENDPOINTS = {
-        "/{ResId}/add-Rating/{UserId}", "/Restaurant/getAllRes"
+        "/User/**",
+        "/{ResId}/add-Rating/{UserId}"
+        ,
+         "/Restaurant/getAllRes"
+        ,
+        "/Order/**"
+        ,
+        "/Cart/**"
     };
+    public static List<String> getPublicEndpoints() {
+        return Arrays.asList(PUBLIC_ENDPOINTS);
+    }
 }
