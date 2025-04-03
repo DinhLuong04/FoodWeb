@@ -14,8 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateOrder {
-
-    private int userid;
     private int resid;
-    private int[] foodid;
+    private int addressid;
+    private List<OrdersItemRequest> listFood;
+   
 }

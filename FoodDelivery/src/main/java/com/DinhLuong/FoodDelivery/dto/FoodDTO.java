@@ -15,5 +15,6 @@ public class FoodDTO {
     private String image;
     private String timeShip;
     private double price;
+
    
 }

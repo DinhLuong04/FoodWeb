@@ -9,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCart {
-    private int user_id;
     private int res_id;
     private int food_id;
     private int quality;

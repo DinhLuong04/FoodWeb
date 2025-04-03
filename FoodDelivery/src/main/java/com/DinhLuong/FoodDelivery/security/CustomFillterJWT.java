@@ -1,5 +1,6 @@
 package com.DinhLuong.FoodDelivery.security;
 
+import com.DinhLuong.FoodDelivery.Config.ApiEndpoints;
 import com.DinhLuong.FoodDelivery.Ultil.JwtUltil;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -23,12 +25,8 @@ import java.util.List;
 @Component
 public class CustomFillterJWT extends OncePerRequestFilter {
 
-    private static final List<String> PUBLIC_API_LIST = List.of(
-            "/ws/**", "/login", "/swagger-ui", "/v3/api-docs", "/Restaurant/getRes", "/Order","/chat/**","/user/**"
-            ,"/chatroom/**","/user"
-            ,"/app/**"
-            ,"/private-message/**"
-            );
+    private static final List<String> PUBLIC_API_LIST =  ApiEndpoints.getPublicEndpoints();
+    private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Autowired
     private JwtUltil jwtUltil;
@@ -42,21 +40,18 @@ public class CustomFillterJWT extends OncePerRequestFilter {
             throws ServletException, IOException {
    
 
-    String path = request.getRequestURI();
-    // System.out.println("Checking request path: " + path);
-    // if (path.startsWith("/ws") || "websocket".equalsIgnoreCase(request.getHeader("Upgrade"))) {
-    //     System.out.println("Bypassing JWT authentication for WebSocket...");
-    //     filterChain.doFilter(request, response);
-    //     return;
-    // }
-    // Bỏ qua xác thực nếu là WebSocket request
-    if (PUBLIC_API_LIST.stream().anyMatch(path::startsWith)
-            || ("Upgrade".equalsIgnoreCase(request.getHeader("Connection"))
-                && "websocket".equalsIgnoreCase(request.getHeader("Upgrade")))) {
-        System.out.println("Bo qua xac thuc voi web socket");
-        filterChain.doFilter(request, response);
-        return;
-    }
+                String path = request.getRequestURI();
+
+                boolean isPublic = PUBLIC_API_LIST.stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
+            
+                boolean isWebSocket = "Upgrade".equalsIgnoreCase(request.getHeader("Connection")) &&
+                                      "websocket".equalsIgnoreCase(request.getHeader("Upgrade"));
+            
+                if (isPublic || isWebSocket) {
+                    System.out.println("Bỏ qua xác thực với API công khai hoặc WebSocket: " + path);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
 
         String token = getTokenFromHeader(request);
 
