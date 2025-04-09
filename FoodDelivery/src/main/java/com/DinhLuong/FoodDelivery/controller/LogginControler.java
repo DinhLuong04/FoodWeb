@@ -75,5 +75,22 @@ public class LogginControler {
         return new ResponseEntity<>( respone, HttpStatus.OK);
     }
 
+    @PostMapping("/registerShipper")
+    public ResponseEntity<?> registerShiper(@RequestBody SignUpRequest SignUpRequest ){
+        responeData respone = new responeData();
+        try{
+            respone.setData(loginService.RegisterUser(SignUpRequest));
+            respone.setMessage("User registered successfully");
+        }
+        catch(Exception e){
+            respone.setStatus(400);
+            respone.setMessage(e.getMessage());
+            return new ResponseEntity<>( respone, HttpStatus.OK);
+        }
+
+
+        return new ResponseEntity<>( respone, HttpStatus.OK);
+    }
+
 
 }

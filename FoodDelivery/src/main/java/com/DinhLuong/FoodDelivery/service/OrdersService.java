@@ -175,5 +175,29 @@ public class OrdersService implements OrdersServiceImp{
         ordersRepone.setItems(items);
         return ordersRepone;
     }
-   
+
+    @Override
+    public String updateOrderStatus(int orderId, OrderStatus newStatus) {
+        Orders order = orderRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+        if (order.getStatus().equals(OrderStatus.CANCELLED.getValue())) {
+            throw new RuntimeException("Cannot update cancelled order");
+        }
+        
+        if (!isValidStatusTransition(order.getStatus(), newStatus)) {
+            throw new IllegalStateException("Invalid status transition from " + 
+                order.getStatus() + " to " + newStatus.getValue());
+        }
+        order.setStatus(newStatus.getValue());
+        orderRepository.save(order);
+        
+        return "Update success";
+    }
+    
+    private boolean isValidStatusTransition(String currentStatus, OrderStatus newStatus) {
+        if (currentStatus.equals(OrderStatus.CANCELLED.getValue())) return false;
+        if (currentStatus.equals(OrderStatus.DELIVERED.getValue())) return false;
+        if (newStatus == OrderStatus.PENDING) return false;
+        return true;
+    }
 }
