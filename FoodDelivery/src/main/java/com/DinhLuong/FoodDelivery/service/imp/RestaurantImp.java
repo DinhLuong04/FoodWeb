@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.DinhLuong.FoodDelivery.dto.RestaurantDTO;
 import com.DinhLuong.FoodDelivery.entity.Restaurant;
+import com.DinhLuong.FoodDelivery.payload.respone.OrdersRepone;
 
 public interface RestaurantImp {
     List<RestaurantDTO> getAllRes();
@@ -14,4 +15,5 @@ public interface RestaurantImp {
     String addCategory(int resID,int cateID);
     Restaurant Update(int Id,String title, String subtitle, String description, MultipartFile file, Boolean isFreeship, String address);
     boolean deleteRes(int id);
+    List<OrdersRepone> getListOrders();
 }

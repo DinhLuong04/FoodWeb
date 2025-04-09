@@ -14,7 +14,7 @@ public class OrdersRepone {
     private Date createDate;
     private double totalPrice;
     private String status;
-    private String ResName;
+    private String resName;
     private AddressDTO address;
     private List<OrderItemRepone> items;
 }

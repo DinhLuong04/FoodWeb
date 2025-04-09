@@ -35,4 +35,12 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
            "JOIN FETCH o.address " +
            "WHERE o.id = :orderId")
     Optional<Orders> findOrderWithDetails(@Param("orderId") Integer orderId);
+
+    @Query("SELECT DISTINCT o FROM Orders o " +
+    "JOIN FETCH o.ListorderDetails od " +
+    "JOIN FETCH od.food " +
+    "JOIN FETCH o.restaurant " +
+    "JOIN FETCH o.address " +
+    "WHERE o.status = 'processing' ")
+    List<Orders> findAvailableOrdersForShippers();
 }

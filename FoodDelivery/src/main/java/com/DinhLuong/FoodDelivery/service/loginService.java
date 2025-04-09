@@ -29,7 +29,7 @@ public class loginService  implements loginServiceImp {
         if (userOptional.isPresent()) {
             Users user = userOptional.get();
             System.out.println(user.getFullName());
-            return passwordEncoder.matches(password, user.getPassword());  // ✅ So sánh mật khẩu đã mã hóa
+            return passwordEncoder.matches(password, user.getPassword());  
         }
         return false;
 

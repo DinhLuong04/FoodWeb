@@ -24,6 +24,7 @@ import com.DinhLuong.FoodDelivery.entity.MenuRestaurant;
 import com.DinhLuong.FoodDelivery.entity.RatingRestaurant;
 import com.DinhLuong.FoodDelivery.entity.Restaurant;
 import com.DinhLuong.FoodDelivery.entity.keys.KeyMenuRestaurant;
+import com.DinhLuong.FoodDelivery.payload.respone.OrdersRepone;
 import com.DinhLuong.FoodDelivery.repository.CategoryRepository;
 import com.DinhLuong.FoodDelivery.repository.MenuResRepository;
 import com.DinhLuong.FoodDelivery.repository.RatingRestaurantRepository;
@@ -238,6 +239,12 @@ public class RestaurantService implements RestaurantImp {
 
         Resrepository.delete(res);
         return true;
+    }
+
+    @Override
+    public List<OrdersRepone> getListOrders() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getListOrders'");
     }
 
 }

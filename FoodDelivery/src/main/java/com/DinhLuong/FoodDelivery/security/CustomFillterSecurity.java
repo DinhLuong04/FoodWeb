@@ -30,6 +30,9 @@ public class CustomFillterSecurity {
     @Autowired
     private CustomUserDetailService customUserDetailService;
 
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -56,6 +59,9 @@ public class CustomFillterSecurity {
                 
                 
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(exception -> exception
+            .accessDeniedHandler(accessDeniedHandler) 
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(customFillterJWT, UsernamePasswordAuthenticationFilter.class);
